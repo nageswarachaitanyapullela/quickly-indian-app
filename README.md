@@ -51,11 +51,9 @@ Quickly Indian is a modern Flutter-based food delivery app focused on delivering
    git clone https://github.com/your-username/quickly-indian.git
    cd quickly-indian
    Install dependencies:
+   flutter pub get
    ```
 
-```bash
-flutter pub get
-```
 Run the app:
 
 ```bash
