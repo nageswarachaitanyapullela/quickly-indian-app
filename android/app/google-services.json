@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "459614341788",
+    "project_id": "quickly-indianapp",
+    "storage_bucket": "quickly-indianapp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:459614341788:android:330d99dfdd72e9af68fb59",
+        "android_client_info": {
+          "package_name": "com.example.quickly_indian"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUquYSIWjP2li0rUBI857bGUGab4O-DQM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
