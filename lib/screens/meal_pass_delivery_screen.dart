@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'dart:convert';
 
 class MealPassDeliveryScreen extends StatefulWidget {
   const MealPassDeliveryScreen({Key? key}) : super(key: key);
@@ -24,6 +28,41 @@ class _MealPassDeliveryScreenState extends State<MealPassDeliveryScreen> {
     '1:15 PM – 1:45 PM',
     '2:00 PM – 2:30 PM',
   ];
+
+  Future<void> _processPayment(BuildContext context) async {
+    try {
+      final response = await http.post(
+        Uri.parse('https://api.stripe.com/v1/payment_intents'),
+        headers: {
+          'Authorization': 'Bearer ${dotenv.env['STRIPE_SECRET_KEY']}',
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: {
+          'amount': '0',
+          'currency': 'usd',
+          'payment_method_types[]': 'card',
+        },
+      );
+      final data = jsonDecode(response.body);
+      final clientSecret = data['client_secret'];
+      await Stripe.instance.initPaymentSheet(
+        paymentSheetParameters: SetupPaymentSheetParameters(
+          paymentIntentClientSecret: clientSecret,
+          style: ThemeMode.light,
+          merchantDisplayName: 'Quickly Indian',
+        ),
+      );
+      await Stripe.instance.presentPaymentSheet();
+      if (context.mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('Delivery logged')));
+        Navigator.popUntil(context, ModalRoute.withName('/'));
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Payment failed: $e')));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -112,9 +151,7 @@ class _MealPassDeliveryScreenState extends State<MealPassDeliveryScreen> {
                   width: double.infinity,
                   child: ElevatedButton.icon(
                     onPressed: selectedBuilding != null && selectedSlot != null
-                        ? () {
-                            // TODO: Submit to Firestore and trigger Stripe logic
-                          }
+                        ? () => _processPayment(context)
                         : null,
                     icon: const Icon(Icons.check_circle_outline),
                     label: const Text("Confirm & Log Delivery"),

@@ -70,29 +70,48 @@ class HomeScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 // Header
-                Text(
-                  "Quickly Indian",
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.purple.shade700,
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 24),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.purple.shade200,
+                        Colors.purple.shade50,
+                      ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
+                    borderRadius: BorderRadius.circular(16),
                   ),
-                ),
-                const SizedBox(height: 8),
-                const Text(
-                  "Smart South Indian Meals",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontStyle: FontStyle.italic,
-                    color: Colors.black87,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                const Text(
-                  "Fresh. Fast. Personalized.",
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: Colors.black54,
+                  child: Column(
+                    children: [
+                      Text(
+                        'Quickly Indian',
+                        style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.purple.shade800,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        'Smart South Indian Meals',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontStyle: FontStyle.italic,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      const Text(
+                        'Fresh. Fast. Personalized.',
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.black54,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(height: 10),
