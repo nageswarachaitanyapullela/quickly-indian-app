@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'dart:convert';
 import '../widgets/quickly_app_scaffold.dart';
 
 class SubscriptionCheckoutScreen extends StatelessWidget {
@@ -14,6 +18,45 @@ class SubscriptionCheckoutScreen extends StatelessWidget {
     required this.meals,
     required this.subtext,
   });
+
+  Future<void> _startPayment(BuildContext context) async {
+    try {
+      final priceDouble = double.parse(price.replaceAll(RegExp(r'[^0-9.]'), ''));
+      final amount = (priceDouble * 100).round().toString();
+      final response = await http.post(
+        Uri.parse('https://api.stripe.com/v1/payment_intents'),
+        headers: {
+          'Authorization': 'Bearer ${dotenv.env['STRIPE_SECRET_KEY']}',
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: {
+          'amount': amount,
+          'currency': 'usd',
+          'payment_method_types[]': 'card',
+        },
+      );
+      final data = jsonDecode(response.body);
+      final clientSecret = data['client_secret'];
+      await Stripe.instance.initPaymentSheet(
+        paymentSheetParameters: SetupPaymentSheetParameters(
+          paymentIntentClientSecret: clientSecret,
+          style: ThemeMode.light,
+          merchantDisplayName: 'Quickly Indian',
+        ),
+      );
+      await Stripe.instance.presentPaymentSheet();
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Payment successful!')),
+        );
+        Navigator.popUntil(context, ModalRoute.withName('/')); // back to home
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Payment failed: $e')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,9 +144,7 @@ class SubscriptionCheckoutScreen extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {
-                      // TODO: Replace with Stripe logic
-                    },
+                    onPressed: () => _startPayment(context),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: theme.primaryColor,
                       foregroundColor: Colors.white,

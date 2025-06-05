@@ -28,6 +28,7 @@ Quickly Indian is a modern Flutter-based food delivery app focused on delivering
 | Auth       | Firebase Authentication            |
 | Backend    | Firebase Firestore & Functions     |
 | Payments   | Stripe (Test Mode + Subscriptions) |
+| Maps       | Google Maps Flutter                |
 | Deployment | GitHub + Firebase Hosting (TBD)    |
 
 ---
@@ -68,6 +69,16 @@ Ensure you’ve configured Firebase project
 Add google-services.json (Android) and GoogleService-Info.plist (iOS)
 
 Add Firebase config in web/index.html for web support
+
+Google Maps Setup:
+
+Add your Google Maps API key in the respective Android, iOS and web configuration files to enable the map view on the order tracking screen.
+
+Stripe Setup:
+
+1. Copy `secrets/.env.sample` to `secrets/.env` and add your test keys.
+2. Install dependencies with `flutter pub get` after adding the keys.
+3. Payments are processed in test mode via Stripe's payment sheet.
 
 🤝 Contributing
 Pull requests welcome! Please fork the repository and submit a PR.
