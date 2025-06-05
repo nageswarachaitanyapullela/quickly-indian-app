@@ -53,17 +53,16 @@ Quickly Indian is a modern Flutter-based food delivery app focused on delivering
    Install dependencies:
    ```
 
-bash
-Copy
-Edit
+```bash
 flutter pub get
+```
 Run the app:
 
-bash
-Copy
-Edit
+```bash
+
 flutter run -d chrome # for web
 flutter run # for mobile
+```
 Firebase Setup:
 
 Ensure you’ve configured Firebase project
